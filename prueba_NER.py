@@ -9,7 +9,7 @@ from spacy.training import offsets_to_biluo_tags
 
 pdf_path = r'C:\Users\chant\OneDrive\Escritorio\TD8\Modern Architecture_CH2020.pdf'
 
-##extrae las palabras de una pagina dada
+##Extrae las palabras de una pagina dada
 try:
     with pdfplumber.open(pdf_path) as pdf:
         # Check the number of pages
@@ -29,14 +29,14 @@ except Exception as e:
     print(f'An error occurred: {e}')
 
 
-# Prepara training data
+# Se define un conjunto de training data
 TRAIN_DATA = [
     ("One of the most famous examples of modern architecture is the Villa Savoye by Le Corbusier.", {"entities": [(57, 69, "ARCH")]}),
     ("Another notable work is Fallingwater by Frank Lloyd Wright.", {"entities": [(24, 35, "ARCH")]}),
     ("The Guggenheim Museum, designed by Frank Lloyd Wright, is a masterpiece of modern architecture.", {"entities": [(4, 23, "ARCH")]}),
     ("The Sydney Opera House is an iconic example of modern architecture.", {"entities": [(4, 22, "ARCH")]}),
 ]
-# Cargar el modelo 
+# Carga el modelo 
 nlp = spacy.blank("en")
 
 def check_alignment(text, entities):
@@ -44,7 +44,7 @@ def check_alignment(text, entities):
     biluo_tags = offsets_to_biluo_tags(doc, entities)
     return biluo_tags
 
-# Verificar la alineación 
+# Verifica la alineación 
 for text, annotations in TRAIN_DATA:
     entities = annotations.get("entities")
     biluo_tags = check_alignment(text, entities)
@@ -52,7 +52,7 @@ for text, annotations in TRAIN_DATA:
     print(f'Entities: {entities}')
     print(f'BILUO Tags: {biluo_tags}\n')
 
-# Step 3: Train NER 
+# Entrenamiento 
 ner = nlp.add_pipe("ner")
 for _, annotations in TRAIN_DATA:
     for ent in annotations.get("entities"):
